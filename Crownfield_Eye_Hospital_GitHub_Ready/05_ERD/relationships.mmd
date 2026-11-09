@@ -1,0 +1,50 @@
+erDiagram
+  SPECIALTY o|--o{ CLINICIAN : "primary specialty (optional at clinician)"
+  PATIENT ||--o{ APPOINTMENT : attends
+  CLINICIAN ||--o{ APPOINTMENT : conducts
+  CLINIC ||--o{ APPOINTMENT : hosts
+  APPOINTMENT ||--o{ DIAGNOSIS : results_in
+  APPOINTMENT ||--o{ PRESCRIPTION : results_in
+  PRESCRIPTION ||--|{ PRESCRIPTION_ITEM : includes
+  MEDICINE ||--o{ PRESCRIPTION_ITEM : references
+  APPOINTMENT ||--o| FOLLOW_UP : generates
+  PATIENT ||--o| PATIENT_TOKEN : token
+  PATIENT { string patient_id PK
+            string patient_name
+            string postcode }
+  SPECIALTY { int specialty_id PK
+              string specialty_name }
+  CLINICIAN { int clinician_id PK
+              string clinician_name
+              int specialty_id FK }
+  CLINIC { int clinic_id PK
+           string clinic_name }
+  APPOINTMENT { int appointment_id PK
+                string patient_id FK
+                int clinician_id FK
+                int clinic_id FK
+                date appointment_date
+                time appointment_time }
+  DIAGNOSIS { int diagnosis_id PK
+              int appointment_id FK
+              string diagnosis_description }
+  PRESCRIPTION { int prescription_id PK
+                 int appointment_id FK
+                 date prescription_date }
+  MEDICINE { int medicine_id PK
+             string medicine_name }
+  PRESCRIPTION_ITEM { int prescription_item_id PK
+                      int prescription_id FK
+                      int medicine_id FK
+                      string dose
+                      string route
+                      string frequency
+                      string duration }
+  FOLLOW_UP { int follow_up_id PK
+              int appointment_id FK
+              date follow_up_due_date
+              string priority
+              string status }
+  PATIENT_TOKEN { string patient_id PK, FK
+                  string source_token
+                  string token_sha256 }
